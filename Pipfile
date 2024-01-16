@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 langchain = "*"
+langchain_openai = "*"
+langchain-community = "*"
 beautifulsoup4 = "*"
 black = "*"
 tiktoken = "*"
