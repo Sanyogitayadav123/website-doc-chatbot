@@ -31,7 +31,6 @@ def run_llm(query: str, chat_history: List[Dict[str, Any]] = []):
         embedding=embeddings,
         index_name=INDEX_NAME,
     )
-    
     chat = ChatOpenAI(
         model_name="gpt-3.5-turbo-0613",
         verbose=True,
