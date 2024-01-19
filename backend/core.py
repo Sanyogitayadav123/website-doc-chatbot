@@ -12,6 +12,7 @@ pinecone.init(
     environment=os.environ["PINECONE_ENVIRONMENT_REGION"],
 )
 
+
 INDEX_NAME = "website-doc"
 
 # Define your static prompts and responses
