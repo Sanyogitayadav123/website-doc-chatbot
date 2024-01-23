@@ -1,4 +1,3 @@
-
 import os
 from typing import Any, Dict, List
 from langchain_openai.embeddings import OpenAIEmbeddings
@@ -6,29 +5,19 @@ from langchain_openai.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.vectorstores import Pinecone
 import pinecone
-
-
-pinecone.init(
+# Create a Pinecone Index with your API key and environment
+index = pinecone.Index(
+    index_name="website-doc",
     api_key=os.environ["PINECONE_API_KEY"],
     environment=os.environ["PINECONE_ENVIRONMENT_REGION"],
+    host='https://website-doc-o4higtn.svc.gcp-starter.pinecone.io'
 )
-
 
 INDEX_NAME = "website-doc"
 
-# Define your static prompts and responses
-static_prompts = {
-    "Do you have radiant heat flooring?": "Yes, we do, please see here: https://www.decolandia.ro/parchet-pentru-incalzire-prin-pardoseala",
-    "Do you have engineered flooring, 10 mm thick, tongue and grove?": "Yes, we have. Please check here: https://www.decolandia.ro/parchet-stratificat/filtrare/grosime-f3,10-mm-v25/tip-prindere-f6,nut-si-feder-v45",
-    "which one is in stock?": "For these products, we only have stock at the external provider, meaning a delivery term of 5-10 days for https://www.decolandia.ro/parchet-stratificat/filtrare/grosime-f3,10-mm-v25/tip-prindere-f6,nut-si-feder-v45?stoc=1",
-}
-
 def run_llm(query: str, chat_history: List[Dict[str, Any]] = []):
-    # Use the static response if the query is in the static prompts
-    if query in static_prompts:
-        return {"answer": static_prompts[query], "source_documents": []}
-
     embeddings = OpenAIEmbeddings(openai_api_key=os.environ["OPENAI_API_KEY"])
+
     docsearch = Pinecone.from_existing_index(
         embedding=embeddings,
         index_name=INDEX_NAME,
