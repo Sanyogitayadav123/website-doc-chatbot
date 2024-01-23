@@ -20,6 +20,7 @@ uvicorn = "*"
 streamlit = "*"
 streamlit-chat = "*"
 tqdm = "*"
+python-dotenv="*"
 
 [dev-packages]
 
