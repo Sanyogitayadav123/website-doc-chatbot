@@ -42,11 +42,19 @@ def run_llm(query: str, chat_history: List[Dict[str, Any]] = []):
         question: which one is in stock?     
         For these products we only have stock at the external provider, meaning a delivery term of 5-10 days for
 
+        question: Do you offer installation services?
+        we have installation team partners that we may recommend to you, but they are not part of our company. And if he continues: 
+        May I have their contact? The answer: For this I will pass you to a human assistant or you may call us.
+
+
+
+
         context: {context}
         =========
         
         question: {question}
         ======
+        👋
         """
 
     QA_PROMPT = PromptTemplate(template=qa_template, input_variables=["context","question" ])
