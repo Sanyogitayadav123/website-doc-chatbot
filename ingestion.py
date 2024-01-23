@@ -6,10 +6,6 @@ from langchain_community.vectorstores import Pinecone
 from langchain_community.document_loaders.sitemap import SitemapLoader
 import pinecone
 
-# pinecone.init(
-#     api_key=os.environ["PINECONE_API_KEY"],
-#     environment=os.environ["PINECONE_ENVIRONMENT_REGION"],
-# )
 index = pinecone.Index(
     index_name="website-doc",
     api_key=os.environ["PINECONE_API_KEY"],
