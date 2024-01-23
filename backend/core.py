@@ -1,9 +1,11 @@
+
 import os
 from typing import Any, Dict, List
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain_openai.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.vectorstores import Pinecone
+from langchain_core.prompts import PromptTemplate
 import pinecone
 # Create a Pinecone Index with your API key and environment
 index = pinecone.Index(
@@ -27,9 +29,35 @@ def run_llm(query: str, chat_history: List[Dict[str, Any]] = []):
         verbose=True,
         temperature=0,
     )
+    qa_template = """
+        You are a website supporter to help customer about ecommerce products and other webiste related information: 
+     You the following pieces of context to answers the question at the end: 
+
+        question:Do you have radiant heat flooring?
+        answers: Yes, we do, please see here
+
+        question:Do you have engineered flooring, 10 mm thick, tongue and grove?
+        answers:  Yes, we have. Please check here
+
+        question:which one is in stock?     
+        answers: For these products we only have stock at the external provider, meaning a delivery term of 5-10 days for
+
+        context: {context}
+        =========
+        
+        question: {question}
+        ======
+        """
+
+    QA_PROMPT = PromptTemplate(template=qa_template, input_variables=["context","question" ])
+
+
 
     qa = ConversationalRetrievalChain.from_llm(
-        llm=chat, retriever=docsearch.as_retriever(), return_source_documents=True
+        llm=chat, retriever=docsearch.as_retriever(),
+         return_source_documents=True,
+        verbose=True,
+        combine_docs_chain_kwargs={'prompt': QA_PROMPT}
     )
 
     return qa({"question": query, "chat_history": chat_history})
