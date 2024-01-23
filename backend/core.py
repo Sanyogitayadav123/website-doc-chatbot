@@ -33,14 +33,14 @@ def run_llm(query: str, chat_history: List[Dict[str, Any]] = []):
         You are a website supporter to help customer about ecommerce products and other webiste related information: 
      You the following pieces of context to answers the question at the end: 
 
-        question:Do you have radiant heat flooring?
-        answers: Yes, we do, please see here
+        question: Do you have radiant heat flooring?
+        Yes, we do, please see here
 
-        question:Do you have engineered flooring, 10 mm thick, tongue and grove?
-        answers:  Yes, we have. Please check here
+        question: Do you have engineered flooring, 10 mm thick, tongue and grove?
+        Yes, we have. Please check here
 
-        question:which one is in stock?     
-        answers: For these products we only have stock at the external provider, meaning a delivery term of 5-10 days for
+        question: which one is in stock?     
+        For these products we only have stock at the external provider, meaning a delivery term of 5-10 days for
 
         context: {context}
         =========
