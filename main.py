@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 def create_sources_string(source_urls: Set[str]) -> str:
     if not source_urls:
         return ""
