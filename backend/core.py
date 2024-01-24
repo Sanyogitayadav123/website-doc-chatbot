@@ -24,48 +24,59 @@ def run_llm(query: str, chat_history: List[Dict[str, Any]] = []):
         embedding=embeddings,
         index_name=INDEX_NAME,
     )
+
+    print("docsearch=>",docsearch)
+
     chat = ChatOpenAI(
         model_name="gpt-3.5-turbo-0613",
         verbose=True,
         temperature=0,
     )
+
     qa_template = """
-        You are a website supporter to help customer about ecommerce products and other webiste related information: 
-     You the following pieces of context to answers the question at the end: 
+     context: {context}
 
-        question: Do you have radiant heat flooring?
-        Yes, we do, please see here
+     question: {question}
+     """
 
-        question: Do you have engineered flooring, 10 mm thick, tongue and grove?
-        Yes, we have. Please check here
-
-        question: which one is in stock?     
-        For these products we only have stock at the external provider, meaning a delivery term of 5-10 days for
-
-        question: Do you offer installation services?
-        we have installation team partners that we may recommend to you, but they are not part of our company. And if he continues: 
-        May I have their contact? The answer: For this I will pass you to a human assistant or you may call us.
+    #      You are a website supporter to help customer about ecommerce products and other webiste related information: 
+    #  You the following pieces of context to answers the question at the end: 
 
 
+       
+    #     question: Do you have radiant heat flooring?
+    #     Yes, we do, please see here
+
+    #     question: Do you have engineered flooring, 10 mm thick, tongue and grove?
+    #     Yes, we have. Please check here
+
+    #     question: which one is in stock?     
+    #     For these products we only have stock at the external provider, meaning a delivery term of 5-10 days for
+
+    #     question: Do you offer installation services?
+    #     we have installation team partners that we may recommend to you, but they are not part of our company. And if he continues: 
+    #     May I have their contact? The answer: For this I will pass you to a human assistant or you may call us.
 
 
-        context: {context}
-        =========
+
+
+    #     context: {context}
+    #     =========
         
-        question: {question}
-        ======
-        👋
-        """
+    #     question: {question}
+    #     ======
+    #     """
 
     QA_PROMPT = PromptTemplate(template=qa_template, input_variables=["context","question" ])
 
 
 
     qa = ConversationalRetrievalChain.from_llm(
-        llm=chat, retriever=docsearch.as_retriever(),
+        llm=chat, retriever=docsearch.as_retriever(search_type="similarity",search_kwargs={"k":2}),
          return_source_documents=True,
         verbose=True,
-        combine_docs_chain_kwargs={'prompt': QA_PROMPT}
+        combine_docs_chain_kwargs={'prompt': QA_PROMPT},
+        
     )
 
     return qa({"question": query, "chat_history": chat_history})
